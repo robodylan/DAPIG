@@ -16,6 +16,8 @@ namespace DAPIG
         {
             TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 74);
             listener.Start();
+            Thread updateThread = new Thread(Update);
+            updateThread.Start();
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
@@ -29,29 +31,33 @@ namespace DAPIG
 
         public static void Update()
         {
-            lock(entities)
+            while(true)
             {
-                foreach (Entity entity in entities)
+                Thread.Sleep(1000 / 60);
+                lock(entities)
                 {
-                    if (entity.isMoving)
+                    foreach (Entity entity in entities)
                     {
-                        switch (entity.direction)
+                        if (entity.isMoving)
                         {
-                            case Entity.Direction.Forward:
-                                entity.y--;
-                                break;
-                            case Entity.Direction.Left:
-                                entity.x--;
-                                break;
-                            case Entity.Direction.Backward:
-                                entity.y++;
-                                break;
-                            case Entity.Direction.Right:
-                                entity.x++;
-                                break;
+                            switch (entity.direction)
+                            {
+                                case Entity.Direction.Forward:
+                                    if(entity.y > 0) entity.y--;
+                                    break;
+                                case Entity.Direction.Left:
+                                    if(entity.x > 0) entity.x--;
+                                    break;
+                                case Entity.Direction.Backward:
+                                    if(entity.y < 1024)entity.y++;
+                                    break;
+                                case Entity.Direction.Right:
+                                    if(entity.x < 1024)entity.x++;
+                                    break;
+                            }
                         }
                     }
-                }
+                }          
             }
         }
 
@@ -75,7 +81,7 @@ namespace DAPIG
             NetworkStream stream = client.GetStream();
             int ID = rand.Next(1, 9);
             lock(entities) entities.Add(new Entity(ID, "NOT_SET", 0, 0));
-            byte[] bufferTMP = Encoding.ASCII.GetBytes("ID:" + ID.ToString());
+            byte[] bufferTMP = Encoding.ASCII.GetBytes("ID:" + ID.ToString() + "\r\n");
             stream.Write(bufferTMP, 0, bufferTMP.Length);
             while (client.Connected)
             {
@@ -94,7 +100,7 @@ namespace DAPIG
                             string output = "";
                             foreach (Entity entity in entities)
                             {
-                                lock (entities) output = output + "<" + entity.username + "," + entity.x + "," + entity.y + "," + entity.direction + "," + entity.health + ">\r\n";
+                                lock (entities) output = output + entity.username + "," + entity.x + "," + entity.y + "," + entity.direction + "," + entity.health + "\r\n";
                             }
                             buffer = Encoding.ASCII.GetBytes(output);
                             stream.Write(buffer, 0, output.Length);
@@ -153,10 +159,18 @@ namespace DAPIG
                         case "isMoving":
                             foreach (Entity entity in entities)
                             {
-                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                try
                                 {
-                                    entity.isMoving = Convert.ToBoolean(input.Split(':')[2]);
-                                    break;
+
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        entity.isMoving = Convert.ToBoolean(input.Split(':')[2]);
+                                        break;
+                                    }
+                                }
+                                catch
+                                {
+
                                 }
                             }
                             break;
