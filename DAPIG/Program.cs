@@ -12,6 +12,7 @@ namespace DAPIG
         {
             Random rand = new Random();
             List<Entity> entities = new List<Entity>();
+            List<Tile> map = new List<Tile>();
             //Create tons of random entities
             TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 74);
             listener.Start();
