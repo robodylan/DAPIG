@@ -31,7 +31,6 @@ namespace DAPIG
                     string input;
                     input = Encoding.ASCII.GetString(buffer);
                     input = input.Split(Convert.ToChar(0))[0];
-                    Console.Write(input);
                     switch (input.Split(':')[0])
                     {                       
                         case "getPlayers":
@@ -49,60 +48,101 @@ namespace DAPIG
                         case "moveForward":
                             foreach (Entity entity in entities)
                             {
-                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                try {
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        entity.direction = Entity.Direction.Forward;
+                                        break;
+                                    }
+                                }
+                                catch
                                 {
-                                    entity.direction = Entity.Direction.Forward;
-                                    break;
+
                                 }
                             }
                             break;
                         case "moveLeft":
                             foreach (Entity entity in entities)
                             {
-                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                try
                                 {
-                                    entity.direction = Entity.Direction.Left;
-                                    break;
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        entity.direction = Entity.Direction.Left;
+                                        break;
+                                    }
+                                }
+                                catch
+                                {
+
                                 }
                             }
                             break;
                         case "moveDown":
                             foreach (Entity entity in entities)
                             {
-                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                try
                                 {
-                                    entity.direction = Entity.Direction.Backward;
-                                    break;
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        entity.direction = Entity.Direction.Backward;
+                                        break;
+                                    }
+                                }
+                                catch
+                                {
+
                                 }
                             }
                             break;
                         case "moveRight":
                             foreach (Entity entity in entities)
                             {
-                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                try
                                 {
-                                    entity.direction = Entity.Direction.Right;
-                                    break;
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        entity.direction = Entity.Direction.Right;
+                                        break;
+                                    }
+                                }
+                                catch
+                                {
+
                                 }
                             }
                             break;
                         case "moveNone":
                             foreach (Entity entity in entities)
                             {
-                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                try
                                 {
-                                    entity.direction = Entity.Direction.None;
-                                    break;
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        entity.direction = Entity.Direction.None;
+                                        break;
+                                    }
+                                }
+                                catch
+                                {
+
                                 }
                             }
                             break;
-                        case "setUserName":
+                        case "setUsername":
                             foreach(Entity entity in entities)
                             {
-                                if(entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                try
                                 {
-                                    entity.username = input.Split(':')[2];
-                                    break;
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        entity.username = input.Split(':')[2];
+                                        break;
+                                    }
+                                }
+                                    catch
+                                {
+                           
                                 }
                             }
                             break;
