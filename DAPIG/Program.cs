@@ -18,7 +18,7 @@ namespace DAPIG
             TcpClient client = listener.AcceptTcpClient();
             NetworkStream stream = client.GetStream();
             int ID = rand.Next(111111111, 999999999);
-            entities.Add(new Entity(ID, "robodylan", 0, 0));
+            entities.Add(new Entity(ID, "NOT_SET", 0, 0));
             byte[] bufferTMP = Encoding.ASCII.GetBytes("ID:" + ID.ToString());
             stream.Write(bufferTMP, 0, bufferTMP.Length);
             while (client.Connected)
@@ -37,23 +37,84 @@ namespace DAPIG
                             string output = "";
                             foreach(Entity entity in entities)
                             {
-                                output = output + "<" + entity.username + "," + entity.x + "," + entity.y + "," + entity.rotation + "," + entity.health +">\r\n";
+                                output = output + "<" + entity.username + "," + entity.x + "," + entity.y + "," + entity.direction + "," + entity.health +">\r\n";
                                 buffer = Encoding.ASCII.GetBytes(output);
                                 stream.Write(buffer, 0, output.Length);
                             }
                             break;
                         case "getMap":
+                            //TODO: Return map
                             break;
                         case "moveForward":
+                            foreach (Entity entity in entities)
+                            {
+                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                {
+                                    entity.direction = Entity.Direction.Forward;
+                                    break;
+                                }
+                            }
                             break;
                         case "moveLeft":
+                            foreach (Entity entity in entities)
+                            {
+                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                {
+                                    entity.direction = Entity.Direction.Left;
+                                    break;
+                                }
+                            }
                             break;
                         case "moveDown":
+                            foreach (Entity entity in entities)
+                            {
+                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                {
+                                    entity.direction = Entity.Direction.Backward;
+                                    break;
+                                }
+                            }
                             break;
                         case "moveRight":
+                            foreach (Entity entity in entities)
+                            {
+                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                {
+                                    entity.direction = Entity.Direction.Right;
+                                    break;
+                                }
+                            }
                             break;
                         case "moveNone":
+                            foreach (Entity entity in entities)
+                            {
+                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                {
+                                    entity.direction = Entity.Direction.None;
+                                    break;
+                                }
+                            }
                             break;
+                        case "setUserName":
+                            foreach(Entity entity in entities)
+                            {
+                                if(entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                {
+                                    entity.username = input.Split(':')[2];
+                                    break;
+                                }
+                            }
+                            break;
+                        case "isMoving":
+                            foreach (Entity entity in entities)
+                            {
+                                if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                {
+                                    entity.isMoving = Convert.ToBoolean(input.Split(':')[2]);
+                                    break;
+                                }
+                            }
+                            break; 
                     }
 
                 }

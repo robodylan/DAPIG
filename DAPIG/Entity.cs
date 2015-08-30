@@ -8,11 +8,12 @@ namespace DAPIG
 {
     class Entity
     {
+        public bool isMoving = false;
         public int key;
         public string username;
         public int x;
         public int y;
-        public int rotation;
+        public Direction direction = Direction.None;
         public int health;
         public Entity(int key, string username, int x, int y)
         {
@@ -21,6 +22,15 @@ namespace DAPIG
             this.x = x;
             this.y = y;
             this.health = 100;
+        }
+
+        public enum Direction
+        {
+            Forward,
+            Backward,
+            Left,
+            Right,
+            None
         }
     }
 }
