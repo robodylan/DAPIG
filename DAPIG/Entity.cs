@@ -13,7 +13,7 @@ namespace DAPIG
         public string username;
         public int x;
         public int y;
-        public Direction direction = Direction.None;
+        public Direction direction = Direction.Forward;
         public int health;
         public Entity(int key, string username, int x, int y)
         {
@@ -29,8 +29,7 @@ namespace DAPIG
             Forward,
             Backward,
             Left,
-            Right,
-            None
+            Right
         }
     }
 }

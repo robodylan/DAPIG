@@ -27,11 +27,53 @@ namespace DAPIG
             
         }
 
+        public static void Update()
+        {
+            lock(entities)
+            {
+                foreach (Entity entity in entities)
+                {
+                    if (entity.isMoving)
+                    {
+                        switch (entity.direction)
+                        {
+                            case Entity.Direction.Forward:
+                                entity.y--;
+                                break;
+                            case Entity.Direction.Left:
+                                entity.x--;
+                                break;
+                            case Entity.Direction.Backward:
+                                entity.y++;
+                                break;
+                            case Entity.Direction.Right:
+                                entity.x++;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static string stripEnding(string input)
+        {
+            string output;
+            if (input.ToCharArray()[input.Length - 1] == '\n')
+            {
+                output = input.Substring(0, input.Length - 2); ;   
+            }
+            else
+            {
+                output = input;
+            }
+            return output;
+        }
+
         public static void handleClient(object data)
         {
             TcpClient client = (TcpClient)data;
             NetworkStream stream = client.GetStream();
-            int ID = rand.Next(111111111, 999999999);
+            int ID = rand.Next(1, 9);
             lock(entities) entities.Add(new Entity(ID, "NOT_SET", 0, 0));
             byte[] bufferTMP = Encoding.ASCII.GetBytes("ID:" + ID.ToString());
             stream.Write(bufferTMP, 0, bufferTMP.Length);
@@ -45,6 +87,7 @@ namespace DAPIG
                     string input;
                     input = Encoding.ASCII.GetString(buffer);
                     input = input.Split(Convert.ToChar(0))[0];
+                    input = stripEnding(input);
                     switch (input.Split(':')[0])
                     {
                         case "getPlayers":
@@ -59,90 +102,6 @@ namespace DAPIG
                         case "getMap":
                             //TODO: Return map
                             break;
-                        case "moveForward":
-                            foreach (Entity entity in entities)
-                            {
-                                try
-                                {
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
-                                    {
-                                        entity.direction = Entity.Direction.Forward;
-                                        break;
-                                    }
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-                            break;
-                        case "moveLeft":
-                            foreach (Entity entity in entities)
-                            {
-                                try
-                                {
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
-                                    {
-                                        entity.direction = Entity.Direction.Left;
-                                        break;
-                                    }
-                                }
-                                catch
-                                {
-                                }
-                            }
-                            break;
-                        case "moveDown":
-                            foreach (Entity entity in entities)
-                            {
-                                try
-                                {
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
-                                    {
-                                        entity.direction = Entity.Direction.Backward;
-                                        break;
-                                    }
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-                            break;
-                        case "moveRight":
-                            foreach (Entity entity in entities)
-                            {
-                                try
-                                {
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
-                                    {
-                                        entity.direction = Entity.Direction.Right;
-                                        break;
-                                    }
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-                            break;
-                        case "moveNone":
-                            foreach (Entity entity in entities)
-                            {
-                                try
-                                {
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
-                                    {
-                                        entity.direction = Entity.Direction.None;
-                                        break;
-                                    }
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-                            break;
                         case "setUsername":
                             foreach (Entity entity in entities)
                             {
@@ -151,6 +110,37 @@ namespace DAPIG
                                     if (entity.key == Convert.ToInt32(input.Split(':')[1]))
                                     {
                                         entity.username = input.Split(':')[2];
+                                        break;
+                                    }
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                            break;
+                        case "setDirection":
+                            foreach (Entity entity in entities)
+                            {
+                                try
+                                {
+                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    {
+                                        switch(input.Split(':')[2])
+                                        {
+                                            case "Forward":
+                                                entity.direction = Entity.Direction.Forward;
+                                                break;
+                                            case "Left":
+                                                entity.direction = Entity.Direction.Left;
+                                                break;
+                                            case "Backward":
+                                                entity.direction = Entity.Direction.Backward;
+                                                break;
+                                            case "Right":
+                                                entity.direction = Entity.Direction.Right;
+                                                break;
+                                        }
                                         break;
                                     }
                                 }

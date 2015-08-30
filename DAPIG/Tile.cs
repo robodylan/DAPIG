@@ -11,7 +11,6 @@ namespace DAPIG
         public int x;
         public int y;
         public int ID;
-
         public Tile(int x, int y, int ID)
         {
             this.x = x;
