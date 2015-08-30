@@ -8,12 +8,19 @@ namespace DAPIG
 {
     class Entity
     {
+        public int key;
+        public string username;
         public int x;
         public int y;
-        public Entity(int x, int y)
+        public int rotation;
+        public int health;
+        public Entity(int key, string username, int x, int y)
         {
+            this.key = key;
+            this.username = username;
             this.x = x;
             this.y = y;
+            this.health = 100;
         }
     }
 }
