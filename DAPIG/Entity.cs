@@ -9,13 +9,13 @@ namespace DAPIG
     class Entity
     {
         public bool isMoving = false;
-        public int key;
+        public string key;
         public string username;
         public int x;
         public int y;
         public Direction direction = Direction.Forward;
         public int health;
-        public Entity(int key, string username, int x, int y)
+        public Entity(string key, string username, int x, int y)
         {
             this.key = key;
             this.username = username;

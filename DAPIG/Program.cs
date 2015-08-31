@@ -10,7 +10,7 @@ namespace DAPIG
     internal class Program
     {
         public static List<Entity> entities = new List<Entity>();
-        public static Random rand = new Random();
+        public static Random rand = new Random(DateTime.Now.Millisecond);
         public static List<Tile> map = new List<Tile>();
         private static void Main(string[] args)
         {
@@ -61,6 +61,17 @@ namespace DAPIG
             }
         }
 
+        public static string genID()
+        {
+            string chars = "ABCDEFGHIJKLMPQRSTUVWXYZabcdefghijklmpqrstuvwxyz1234567890";
+            string output = "";
+            for(int i = 0;i < 10;i++)
+            {
+                output += chars[rand.Next(0, chars.Length - 1)];
+            }
+            return output.ToString();
+        }
+
         public static string stripEnding(string input)
         {
             string output;
@@ -79,7 +90,7 @@ namespace DAPIG
         {
             TcpClient client = (TcpClient)data;
             NetworkStream stream = client.GetStream();
-            int ID = rand.Next(1, 9);
+            string ID = genID();
             lock(entities) entities.Add(new Entity(ID, "NOT_SET", 0, 0));
             byte[] bufferTMP = Encoding.ASCII.GetBytes("ID:" + ID.ToString() + "\r\n");
             stream.Write(bufferTMP, 0, bufferTMP.Length);
@@ -113,7 +124,7 @@ namespace DAPIG
                             {
                                 try
                                 {
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    if (entity.key == input.Split(':')[2])
                                     {
                                         entity.username = input.Split(':')[2];
                                         break;
@@ -130,7 +141,7 @@ namespace DAPIG
                             {
                                 try
                                 {
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    if (entity.key == input.Split(':')[1])
                                     {
                                         switch(input.Split(':')[2])
                                         {
@@ -162,7 +173,7 @@ namespace DAPIG
                                 try
                                 {
 
-                                    if (entity.key == Convert.ToInt32(input.Split(':')[1]))
+                                    if (entity.key == input.Split(':')[1])
                                     {
                                         entity.isMoving = Convert.ToBoolean(input.Split(':')[2]);
                                         break;
