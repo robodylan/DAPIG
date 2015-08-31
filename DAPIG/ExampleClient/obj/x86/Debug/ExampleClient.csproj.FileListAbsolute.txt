@@ -22,3 +22,5 @@ C:\Users\Dylan\Documents\GitHub\DAPIG\DAPIG\ExampleClient\bin\Windows\Debug\Shar
 C:\Users\Dylan\Documents\GitHub\DAPIG\DAPIG\ExampleClient\bin\Windows\Debug\SharpDX.Direct3D9.xml
 C:\Users\Dylan\Documents\GitHub\DAPIG\DAPIG\ExampleClient\obj\x86\Debug\ExampleClient.exe
 C:\Users\Dylan\Documents\GitHub\DAPIG\DAPIG\ExampleClient\obj\x86\Debug\ExampleClient.pdb
+C:\Users\Dylan\Documents\GitHub\DAPIG\DAPIG\ExampleClient\obj\x86\Debug\ExampleClient.csprojResolveAssemblyReference.cache
+C:\Users\Dylan\Documents\GitHub\DAPIG\DAPIG\ExampleClient\bin\Windows\Debug\Content\entity.bmp
