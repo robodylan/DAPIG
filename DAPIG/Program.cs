@@ -18,6 +18,7 @@ namespace DAPIG
             listener.Start();
             Thread updateThread = new Thread(Update);
             updateThread.Start();
+            loadMap();
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
@@ -27,6 +28,17 @@ namespace DAPIG
                 Console.WriteLine(output);
             }
             
+        }
+
+        public static void loadMap()
+        {
+            for(int i = 0;i < 100;i++)
+            {
+                int x = rand.Next(0, 128);
+                int y = rand.Next(0, 128);
+                int ID = rand.Next(0, 255);
+                map.Add(new Tile(x, y, ID));
+            }
         }
 
         public static void Update()
@@ -108,16 +120,22 @@ namespace DAPIG
                     switch (input.Split(':')[0])
                     {
                         case "getPlayers":
-                            string output = "";
+                            string playerData = "";
                             foreach (Entity entity in entities)
                             {
-                                lock (entities) output = output + entity.username + "," + entity.x + "," + entity.y + "," + entity.direction + "," + entity.health + "\r\n";
+                                lock (entities) playerData = playerData + entity.username + "," + entity.x + "," + entity.y + "," + entity.direction + "," + entity.health + "\r\n";
                             }
-                            buffer = Encoding.ASCII.GetBytes(output);
-                            stream.Write(buffer, 0, output.Length);
+                            buffer = Encoding.ASCII.GetBytes(playerData);
+                            stream.Write(buffer, 0, playerData.Length);
                             break;
                         case "getMap":
-                            //TODO: Return map
+                            string mapData = "";
+                            foreach(Tile tile in map)
+                            {
+                                lock (map) mapData = mapData + tile.ID + "," + tile.x + "," + tile.y + "\r\n";
+                                buffer = Encoding.ASCII.GetBytes(mapData);
+                                stream.Write(buffer, 0, mapData.Length);
+                            }
                             break;
                         case "setUsername":
                             foreach (Entity entity in entities)
